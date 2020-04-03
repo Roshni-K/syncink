@@ -3,12 +3,43 @@ import { connect } from "react-redux";
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
+    this.submitHandler = this.submitHandler.bind(this);
+  }
+  submitHandler(event) {
+    event.preventDefault();
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("id", event.target.elements[0].value);
+    urlencoded.append("password", event.target.elements[1].value);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow"
+    };
+
+    fetch("http://159.89.175.49:8383/login", requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result.response);
+        window.location.href = "/?token=" + result.response;
+      })
+      .catch(error => {
+        alert("Invalid User Credentials");
+        // window.location.href = window.location;
+        console.log("error", error);
+      });
   }
   render() {
     return (
       <div>
         <div id="single-wrapper">
-          <form className="frm-single">
+          <form
+            onSubmit={event => this.submitHandler(event)}
+            className="frm-single"
+          >
             <div className="inside">
               <div className="title">
                 <strong>Ninja</strong>Admin
