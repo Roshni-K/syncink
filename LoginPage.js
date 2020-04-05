@@ -4,6 +4,12 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.submitHandler = this.submitHandler.bind(this);
+    this.setCookie = this.setCookie.bind(this);
+  }
+  setCookie(c_name, value) {
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + 3000);
+    document.cookie = c_name + "=" + value + "; expires=" + expiry;
   }
   submitHandler(event) {
     event.preventDefault();
@@ -23,8 +29,8 @@ class LoginPage extends React.Component {
     fetch("http://159.89.175.49:8383/login", requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(result.response);
-        window.location.href = "/?token=" + result.response;
+        this.setCookie("syncink_token", result.response);
+        window.location.href = "/";
       })
       .catch(error => {
         alert("Invalid User Credentials");

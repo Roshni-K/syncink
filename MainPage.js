@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 class MainPage extends React.Component {
   constructor(props) {
     super(props);
     this.check = this.check.bind(this);
     this.getCookie = this.getCookie.bind(this);
-    this.setCookie = this.setCookie.bind(this);
   }
   componentDidMount() {
     this.check();
@@ -27,40 +27,40 @@ class MainPage extends React.Component {
     return "";
   }
 
-  setCookie(c_name, value) {
-    var expiry = new Date();
-    expiry.setDate(expiry.getDate() + 3000);
-    document.cookie = c_name + "=" + value + "; expires=" + expiry;
-  }
+  // setCookie(c_name, value) {
+  //   var expiry = new Date();
+  //   expiry.setDate(expiry.getDate() + 3000);
+  //   document.cookie = c_name + "=" + value + "; expires=" + expiry;
+  // }
 
   check() {
-    let usertokenQuery = window.location.search.split("=");
-    if (usertokenQuery[0] === "?token" && usertokenQuery[1]) {
-      this.setCookie("syncink_token", usertokenQuery[1]);
-      return true;
+    // let usertokenQuery = window.location.search.split("=");
+    // if (true) {
+    //   // this.setCookie("syncink_token", usertokenQuery[1]);
+    //   return true;
+    // } else {
+    var usertoken = this.getCookie("syncink_token");
+    if (usertoken) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Accept", "application/json");
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        credentials: "include"
+      };
+      fetch("http://159.89.175.49:8383/authenticate", {
+        credentials: "include"
+      })
+        .then(res => res.json())
+        .then(response => {
+          console.log(response);
+          return true;
+        });
     } else {
-      var usertoken = this.getCookie("syncink_token");
-      if (usertoken) {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Accept", "application/json");
-        var requestOptions = {
-          method: "GET",
-          headers: myHeaders,
-          credentials: "include"
-        };
-        fetch("http://159.89.175.49:8383/authenticate", {
-          credentials: "include"
-        })
-          .then(res => res.json())
-          .then(response => {
-            console.log(response);
-            return true;
-          });
-      } else {
-        window.location.href = "./login";
-      }
+      window.location.href = "./login";
     }
+    // }
   }
   render() {
     return (
@@ -350,7 +350,9 @@ class MainPage extends React.Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Amaza Themes</td>
+                        <Link to="/meeting1">
+                          <td>Amaza Themes</td>
+                        </Link>
                         <td className="text-success">Completed</td>
                       </tr>
                       <tr>

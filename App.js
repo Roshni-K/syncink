@@ -6,7 +6,7 @@ const history = createBrowserHistory();
 
 import LoginPage from "./LoginPage";
 import MainPage from "./MainPage";
-
+import DetailedView from "./DetailedView";
 class App extends Component {
   render() {
     return (
@@ -14,6 +14,7 @@ class App extends Component {
         <Switch>
           <Route path="/" component={MainPage} exact />
           <Route path="/login" component={LoginPage} />
+          <Route path="/:detailedview" component={DetailedView} />
         </Switch>
       </Router>
     );
